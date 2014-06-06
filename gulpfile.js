@@ -27,7 +27,8 @@ var paths = {
 			'src/templates/*.mustache'
 		],
 		partials: [
-			'src/templates/partials/**/*.mustache'
+			'src/templates/partials/**/*.mustache',
+			'src/templates/layout/**/*.mustache'
 		]
 	},
 	build: {
@@ -52,6 +53,8 @@ var gulp = require('gulp'),
 	gulpConcat = require('gulp-concat'),
 	gulpUtil = require('gulp-util'),
 	gulpMustache = require('gulp-mustache'),
+	gulpLiveReload = require('gulp-livereload'),
+	lr = require('tiny-lr'),
 	fs = require('fs'),
 	glob = require('glob'),
 	async = require('async'),
@@ -60,11 +63,14 @@ var gulp = require('gulp'),
 var expressApp = express();
 expressApp.use(express.static(__dirname+'/build/'));
 
+var liveReload = lr();
+
 gulp.task('styles', function() {
 	return gulp.src( paths.src.styles )
 		.pipe(gulpSass({ style: 'compressed' }))
 		.pipe(gulpAutoprefixer('last 2 version', '> 5%', 'safari 5', 'ie 7', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-		.pipe(gulp.dest( paths.build.styles ));
+		.pipe(gulp.dest( paths.build.styles ))
+		.pipe(gulpLiveReload( liveReload ));
 });
 
 gulp.task('fonts', function() {
@@ -74,14 +80,16 @@ gulp.task('fonts', function() {
 
 gulp.task('images', function() {
 	return gulp.src( paths.src.images )
-		.pipe(gulp.dest( paths.build.images ));
+		.pipe(gulp.dest( paths.build.images ))
+		.pipe(gulpLiveReload( liveReload ));
 });
 
 gulp.task('scripts', function() {
 	return gulp.src( paths.src.scripts )
 		.pipe(gulpUglify())
 		.pipe(gulpConcat('app.js'))
-		.pipe(gulp.dest( paths.build.scripts ));
+		.pipe(gulp.dest( paths.build.scripts ))
+		.pipe(gulpLiveReload( liveReload ));
 });
 
 // callback( err, underscored_name, content )
@@ -150,7 +158,8 @@ gulp.task('templates', function() {
 			// Now we have partials.
 			return gulp.src( paths.src.templates )
 				.pipe(gulpMustache({},{},partials))
-				.pipe(gulp.dest( paths.build.templates ));
+				.pipe(gulp.dest( paths.build.templates ))
+				.pipe(gulpLiveReload( liveReload ));
 		}
 	);
 });
@@ -193,14 +202,6 @@ gulp.task('clean-templates', function() {
 
 gulp.task('default', ['clean'], function() {
 	gulp.start( 'styles', 'fonts', 'scripts', 'images', 'templates' );
-});
-
-gulp.task('watch', function() {
-	gulp.watch( paths.src.styles , ['clean-styles', 'styles'] );
-	gulp.watch( paths.src.fonts , ['clean-fonts', 'fonts'] );
-	gulp.watch( paths.src.images , ['clean-images', 'images'] );
-	gulp.watch( paths.src.scripts , ['clean-scripts', 'scripts'] );
-	gulp.watch( paths.src.templates , ['clean-templates', 'templates'] );
 });
 
 gulp.task('server', function() {

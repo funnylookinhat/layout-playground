@@ -10,7 +10,7 @@
 @import "base/foundation-settings";
 
 // Foundation Components - Uncomment what you need.
-// @import
+@import
 	// "../bower_components/foundation/scss/foundation/components/grid",
 	// "../bower_components/foundation/scss/foundation/components/accordion",
 	// "../bower_components/foundation/scss/foundation/components/alert-boxes",
@@ -44,7 +44,7 @@
 	// "../bower_components/foundation/scss/foundation/components/thumbs",
 	// "../bower_components/foundation/scss/foundation/components/tooltips",
 	// "../bower_components/foundation/scss/foundation/components/top-bar",
-	// "../bower_components/foundation/scss/foundation/components/type",
+	"../bower_components/foundation/scss/foundation/components/type";
 	// "../bower_components/foundation/scss/foundation/components/offcanvas",
 	// "../bower_components/foundation/scss/foundation/components/visibility";
 
