@@ -1,0 +1,24 @@
+{
+  "name": "layout-playground",
+  "version": "0.0.0",
+  "homepage": "https://github.com/funnylookinhat/layout-playground",
+  "authors": [
+    "funnylookinhat <funnylookinhat@gmail.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "font-awesome": "~4.1.0",
+    "jquery": "~2.1.1"
+  },
+  "devDependencies": {
+    "foundation": "~5.2.3"
+  }
+}

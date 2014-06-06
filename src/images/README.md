@@ -1,0 +1,1 @@
+Template resource images.
