@@ -125,43 +125,47 @@ function parseMustache (path, after, callback) {
 	});
 }
 
-gulp.task('templates', function() {
-	// We want partials to be name => content
-	var partials = {};
-	async.each(
-		paths.src.partials,
-		function (partialGlob, eachCallback) {
-			glob(partialGlob, {}, function(err, partialFiles) {
-				async.each(
-					partialFiles,
-					function (partialFile, nestedEachCallback) {
-						parseMustache(partialFile, partialGlob.substring(0,partialGlob.indexOf('*')), function (parseErr, name, content) {
-							if( err ) 
-								return nestedEachCallback(parseErr);
+function parseGlobs (partialGlobs, callback) {
+    var partials = {};
+    async.each(
+        partialGlobs,
+        function (partialGlob, eachCallback) {
+            glob(partialGlob, {}, function(err, partialFiles) {
+                async.each(
+                    partialFiles,
+                    function (partialFile, nestedEachCallback) {
+                        parseMustache(partialFile, partialGlob.substring(0,partialGlob.indexOf('*')), function (parseErr, name, content) {
+                            if( err ) 
+                                return nestedEachCallback(parseErr);
 
-							partials[name] = content;
-							
-							return nestedEachCallback();
-						});
-					},
-					function (nestedErr) {
-						eachCallback(nestedErr);
-					}
-				);
-			});
-		},
-		function (err) {
-			if( err ) {
-				console.log(err);
-				process.exit(0);
-			}
-			// Now we have partials.
-			return gulp.src( paths.src.templates )
-				.pipe(gulpMustache({},{},partials))
-				.pipe(gulp.dest( paths.build.templates ))
-				.pipe(gulpLiveReload( liveReload ));
-		}
-	);
+                            partials[name] = content;
+                            
+                            return nestedEachCallback();
+                        });
+                    },
+                    function (nestedErr) {
+                        eachCallback(nestedErr);
+                    }
+                );
+            });
+        },
+        function (err) {
+            if( err ) {
+                return callback(err);
+            }
+
+            return callback('', partials);
+        }
+    );
+}
+
+gulp.task('templates', function() {
+	return parseGlobs( paths.src.partials, function (err, partials) {
+		gulp.src( paths.src.templates )
+			.pipe(gulpMustache({},{},partials))
+			.pipe(gulp.dest( paths.build.templates ))
+			.pipe(gulpLiveReload( liveReload ));
+	});
 });
 
 gulp.task('clean', function() {
