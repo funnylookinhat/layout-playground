@@ -89,12 +89,14 @@ _theme.scss
 	float: right;
 }
 
-.flipped-view #left-bar {
-	float: right;
-}
+.flipped-view {
+    #left-bar {
+    	float: right;
+    }
 
-.flipped-view #right-bar {
-	float: left;
+    #right-bar {
+    	float: left;
+    }
 }
 ```
 
