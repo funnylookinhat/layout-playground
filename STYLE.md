@@ -67,6 +67,7 @@ _theme.scss
 	<div id="left-bar" class="small-12 medium-6 large-6"></div>
 	<div id="right-bar" class="small-12 medium-6 large-6"></div>
 </header>
+```
 
 ```
 #page-header,
