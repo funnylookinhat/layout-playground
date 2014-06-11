@@ -216,7 +216,7 @@ gulp.task('server', function() {
 	gulp.watch( paths.src.scripts , ['clean-scripts', 'scripts'] );
 	gulp.watch( paths.src.templates , ['clean-templates', 'templates'] );
 	gulp.watch( paths.src.partials , ['clean-templates', 'templates'] );
-	liveReload.listen();
+	liveReload.listen(35729);
 	var expressServer = expressApp.listen(listenPort, function() {
 	    console.log('Listening @ http://localhost:%d/', expressServer.address().port);
 	});
